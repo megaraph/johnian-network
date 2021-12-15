@@ -1,0 +1,384 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800&display=swap');
+
+body {
+    background: linear-gradient(103.56deg, #5B7EDE 1.31%, #0B1447 100.93%);
+    color: #333333;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+h1, h2, h3, h4, h5, h6 {
+  color: #FFFFFF;
+}
+
+h1 {
+  font-size: 4.5rem;
+  font-weight: 700;
+}
+
+main h1 {
+  margin-bottom: 1.875rem;
+}
+
+.board-link a {
+  text-decoration: none;
+  display: inline-block;
+  color: inherit;
+  font-weight: 600;
+  font-size: 1.26875rem;
+}
+
+.board-link {
+  margin-bottom: 1rem;
+}
+
+.board-link a::after {
+  content: '';
+  display: block;
+  height: 0.188rem;
+  width: 0;
+  background: #FFFFFF;
+  transition: width .7s;
+}
+
+.board-link a:hover::after {
+  width: 100%;
+  transition: width .7s;
+}
+
+.landing-page h1 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+  
+p {
+  font-size: 1.25rem;
+  color: #FFFFFF;
+}
+
+.landing-page p {
+  max-width: 60.6875rem;
+  text-align: center;
+}
+
+.landing-page {
+  background-image: url('https://res.cloudinary.com/johnian-network/image/upload/v1639368329/landing-background_d2ngla_jyqa6h.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1 20px;
+}
+
+.landing-logo {
+  margin-bottom: 1.375rem;
+  height: 13.1875rem;
+}
+
+.landing-arrow {
+    position:absolute;
+    position: relative;
+    bottom: -15vh;
+  }
+
+#main {
+  height: 100vh;
+}
+
+.board-select {
+    max-width: 51.25rem;
+    max-height: 51.25rem;
+    margin: 3.125rem auto;
+    position: relative;
+    box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);
+    padding: 1.875rem;
+    border-radius: 0.625rem;
+    background: #112487;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bounce Animation */
+.bounce {
+  -moz-animation: bounce 3s infinite;
+  -webkit-animation: bounce 3s infinite;
+  animation: bounce 3s infinite;
+}
+
+@-moz-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -moz-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+@-webkit-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-30px);
+    -ms-transform: translateY(-30px);
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  60% {
+    -moz-transform: translateY(-15px);
+    -ms-transform: translateY(-15px);
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+/* End of Bounce Animation */
+
+
+.alert {
+  height: 40px;
+  width: 575px;
+  font-weight: 600;
+  font-size: 14px;
+  border: transparent;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: opacity 4s;
+
+}
+
+.alert-success {
+  background: linear-gradient(90.21deg, 
+                #0FD7A7 6.46%, 
+                #11FBAC 28.81%, 
+                #0CF6AC 50.11%, 
+                #07F2AB 71.94%, 
+                #04EDAB 93.24%);
+}
+
+.alert-fixed {
+  position: absolute;
+  top: 30px;
+  z-index: 9999;
+}
+
+/* Media queries */
+@media only screen and (max-width: 1536px) {
+  h1 {
+    font-size: 3.6rem;
+  }
+  
+  main h1 {
+    margin-bottom: 0.9rem;
+  }
+  
+  .board-link a {
+    font-size: 1.015rem;
+  }
+  
+  .board-link {
+    margin-bottom: 0.5rem;
+  }
+  
+  .landing-page h1 {
+    margin-bottom: 1.2rem;
+  }
+    
+  p {
+    font-size: 1rem;
+  }
+  
+  .landing-page p {
+    max-width: 48.55rem;
+  }
+  
+  .landing-logo {
+    margin-bottom: 1.1rem;
+    height: 10.55rem;
+  }
+  
+  .landing-arrow {
+      width: 4.55rem;
+      bottom: -15vh;
+    }
+  
+  #main {
+    height: 100vh;
+  }
+  
+  .board-select {
+      max-width: 41rem;
+      max-height: 40rem;
+      margin: 2.5rem auto;
+      position: relative;
+      padding: 1.5rem;
+  }
+}
+
+@media only screen and (max-width : 740px) {
+  .landing-logo {
+    height: 12.1875rem;
+  }
+
+  h1 {
+    font-size: 3.9533rem;
+  }
+
+  .landing-page p {
+    font-size: 1.0985rem;
+    max-width: 27.3rem;
+  }
+
+  .landing-arrow {
+    width: 4.55rem;
+    bottom: -16vh;
+  }
+
+  main h1 {
+    margin-bottom: 1.6458rem;
+  }
+  
+  .board-link a {
+    font-size: 1.11436rem;
+  }
+  
+  .board-link {
+    margin-bottom: 0.87828rem;
+  }
+
+  .board-select {
+    max-width: 28.4375rem;
+    max-height: 55.9rem;
+}
+}
+
+@media only screen and (max-width : 421px) {
+      .landing-logo {
+        height: 9.375rem;
+      }
+
+      h1 {
+        font-size: 3.041rem;
+      }
+
+      .landing-page p {
+        font-size: 0.845rem;
+        max-width: 21rem;
+      }
+
+      .landing-arrow {
+        width: 3.5rem;
+        bottom: -12vh;
+      }
+
+      main h1 {
+        margin-bottom: 1.266rem;
+      }
+      
+      .board-link a {
+        font-size: 0.8572rem;
+      }
+      
+      .board-link {
+        margin-bottom: 0.6756rem;
+      }
+
+      .board-select {
+        max-width: 21.875rem;
+        max-height: 43rem;
+    }
+
+    .alert {
+      max-width: 20rem;
+    }
+}
+
+@media only screen and (max-height : 740px) {
+  .landing-arrow {
+    width: 3.5rem;
+    bottom: -7vh;
+  }
+
+  main h1 {
+    margin-bottom: 1rem;
+  }
+  
+  .board-link {
+    margin-bottom: 0.4rem;
+  }
+
+  .board-select {
+    max-width: 21.875rem;
+    max-height: 38rem;
+}
+}
+
+@media only screen and (max-height : 667px) {
+  main h1 {
+    margin-bottom: 0.7rem;
+  }
+  
+  .board-link {
+    margin-bottom: 0.2rem;
+  }
+
+  .board-link a {
+    font-size: 0.78rem;
+  }
+
+  .board-select {
+    max-height: 34.5rem;
+}
+}
+
+@media only screen and (max-height : 640px) {
+  .landing-arrow {
+    width: 2.8rem;
+    bottom: -6vh;
+  }
+
+  main h1 {
+    margin-bottom: 0.4rem;
+  }
+  
+  .board-link {
+    margin-bottom: 0.14rem;
+  }
+
+  .board-link a {
+    font-size: 0.7rem;
+  }
+
+  .board-select {
+    max-height: 33rem;
+}
+}
+/* End of Media queries */

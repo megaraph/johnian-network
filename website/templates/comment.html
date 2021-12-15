@@ -1,0 +1,370 @@
+{% extends "topics_base.html" %}
+
+{% block title %} Anonymous#{{ comment.author.user_tag }}'s comment{% endblock %}
+{% block pageName %} <a class="page-title-link" href="{{ url_for('boards.board_choice', topic_address=topic.topic_address) }}">{{ topic.topic_name }}</a> {% endblock %}
+
+{% block content %}
+
+    <div class="quick-links-bar">
+        <div class="quick-link">
+            <p>
+                <a href="{{ url_for('boards.selected_post', topic_address=topic.topic_address, post_id=comment.post_id) }}">
+                    Back to original post
+                </a>
+            </p>
+        </div>
+        <div class="quick-link">
+            {% if comment.comment_id %}
+            <p>
+                <a href="{{ url_for('boards.selected_comment', topic_address=topic.topic_address, post_id=comment.post_id, comment_id=comment.comment_id) }}">
+                    Back to original comment
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <article class="media content-section">
+        <div class="media-body">
+            <!-- METADATA -->
+            <div class="article-metadata">
+                
+                <div class="user-info">
+                    <!-- PROFILE PICTURE AND USER TAG -->
+                    <a href="{{ url_for('user_account.compare_with', user_id=comment.author.id) }}" class="profile-pic">
+                        <img class="rounded-circle profile-pic" src="{{ static_url('assets', filename=comment.author.profile_pic) }}" height="40">
+                    </a>
+                    <a class="mr-2 user-link" href="{{ url_for('user_account.compare_with', user_id=comment.author.id) }}">Anonymous#{{ comment.author.user_tag }}</a>
+    
+                    <!-- Posted <number> <minutes/hours/days/months/years> ago -->
+                    <span class="user-posted">• {{ post.date_posted | humanize_time(time_now) }}</span>
+    
+                    {% if post.only_students %}
+                            <small>&#10003;</small>
+                    {% endif %}
+                </div>
+
+                {% if comment.author == current_user or current_user.is_admin %}
+                    <div class="dropdown dropleft">
+
+                        <button class="dropdown dropBtn" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ static_url('assets', filename='settings_white_24dp.svg') }}" alt="">
+                        </button>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <!-- <a class="dropdown-item" href="{{ url_for('boards.edit_post', topic_address=post.topic, post_id=post.id) }}">
+                                <img class="editBtn" src="{{ static_url('assets', filename='icons/edit_vector.svg') }}" alt="">
+                            </a>
+                            <button class="deleteBtn" type="button" data-toggle="modal" data-target="#deleteModal">
+                                <div class="deleteVector">
+                                    <img src="{{ static_url('assets', filename='icons/delete_vector.svg') }}" alt="">
+                                </div>
+                            </button> -->
+                            <a href="{{ url_for('boards.edit_comment', topic_address=comment.topic, post_id=comment.post_id, comment_id=comment.id ) }}" class="dropdown-item">
+                                <img src="{{ static_url('assets', filename='edit_vector.svg') }}" alt="">
+                                Edit
+                            </a>
+                            <a href="" class="dropdown-item" data-toggle="modal" data-target="#deleteModal">
+                                <img src="{{ static_url('assets', filename='delete_vector.svg') }}" alt="">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <!-- Post content / data -->
+            <!-- Title and content -->
+            <p class="article-content">{{ comment.content }}</p>
+
+            {% if comment.image %}
+                <a
+                    href="{{ comment.image | get_cloud_file }}" target="_blank">
+                    <img src="{{ comment.image | get_cloud_file }}" alt="post's image" class="comment-image">
+                </a>
+            {% endif %}
+
+            <div class="article-footer">
+
+                {% if current_user.has_liked_comment(comment) %}
+                    <div class="votes">
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                        onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-up.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down.svg') }}')">
+                            <img id="commentLike-{{ comment.id }}" class="liked" src="{{ static_url('assets', filename='clout-up-shaded.svg')}}" alt="">
+                        </button>
+                        <span id="commentCount-{{ comment.id }}" class="status-liked" style="color: #5B7EDE;"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                        onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-down.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up.svg') }}')">
+                            <img id="commentDislike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                        </button>
+                    </div>
+                {% elif current_user.has_disliked_comment(comment) %}
+                    <div class="votes">
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                        onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-up.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down.svg') }}')">
+                            <img id="commentLike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                        </button>
+                        <span id="commentCount-{{ comment.id }}" class="status-disliked" style="color: #DE5B5B;"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                        onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-down.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up.svg') }}')">
+                            <img id="commentDislike-{{ comment.id }}" class="disliked" src="{{ static_url('assets', filename='clout-down-shaded.svg') }}" alt="">
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="votes">
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                        onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-up.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down.svg') }}')">
+                            <img id="commentLike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                        </button>
+                        <span id="commentCount-{{ comment.id }}"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                        <button 
+                        href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                        onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                        '{{ static_url('assets', filename='clout-down.svg') }}', 
+                        '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                        '{{ static_url('assets', filename='clout-up.svg') }}')">
+                            <img id="commentDislike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                        </button>
+                    </div>
+                {% endif %}
+
+                <div class="comment-count">
+                    <!-- Comments -->
+                    {% set reply_count = comment.query.filter_by(comment_id=comment.id).count() %}
+                    
+                    <img src="{{ static_url('assets', filename='comment-count.svg') }}" alt="">
+                    <small class="text-muted">{{ reply_count }}</small>
+                </div>
+
+            </div>
+
+        </div>
+    </article>
+
+    <!-- Block 2 -->
+    <form action="/boards/{{ post.topic }}/post/{{ post.id }}/comment/{{ comment.id }}" method="POST" enctype="multipart/form-data" class="comment-form" onsubmit="showGif()">
+        <section class="copy">
+            <small>Commenting as Anonymous#{{ current_user.user_tag }}</small>
+        </section>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'post-content-error' %}
+                        <div class="input-container password1">
+                            <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="What do you think?" required></textarea>
+                        </div>
+                        <p class="errorMessage">{{ message }}</p>
+                        <div class="input-container password1">
+                            <input id="image" name="image" type="file" accept="image/*">
+                            <p class="errorMessage"></p>
+                        </div>
+                    {% elif category == 'file-type-error' %}
+                        <div class="input-container password1">
+                            <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="What do you think?" required></textarea>
+                        </div>
+                        <p class="errorMessage"></p>
+                        <div class="input-container password1">
+                            <input id="image" name="image" type="file" accept="image/*">
+                            <p class="errorMessage">{{ message }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="input-container password1">
+                    <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="What do you think?" required></textarea>
+                </div>
+                <div class="input-container password1">
+                    <input id="image" name="image" type="file" accept="image/*">
+                    <p class="errorMessage"></p>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div id="loadingGif" style="display: none;">Submitting <img src="{{ static_url('assets', filename='formSubmit1.gif') }}"></div>
+        <button id="submitBtn" type="submit" class="signup-btn">Comment</button>
+    </form>
+
+    <br>
+
+    <!-- Block 3 -->
+    <h2 class="comments-title">Comments</h2>
+    {% for comment in comments.items %}
+    <ul>
+
+        <!-- <a href="{{ url_for('boards.selected_comment', topic_address=topic.topic_address, post_id=post.id, comment_id=comment.id) }}"></a> -->
+
+        <div class="comment">
+            <li>
+
+                    <div class="article-metadata">
+                        <div class="user-info">
+                            <!-- PROFILE PICTURE AND USER TAG -->
+                            <a href="{{ url_for('user_account.compare_with', user_id=comment.author.id) }}" class="profile-pic">
+                                <img class="rounded-circle profile-pic" src="{{ static_url('assets', filename=comment.author.profile_pic) }}" height="40">
+                            </a>
+                            <a class="mr-2 user-link" href="{{ url_for('user_account.compare_with', user_id=comment.author.id) }}">Anonymous#{{ comment.author.user_tag }}</a>
+            
+                            <!-- Posted <number> <minutes/hours/days/months/years> ago [CS002] -->
+                            <span class="user-posted">• {{ post.date_posted | humanize_time(time_now) }}</span>
+
+                            {% if post.only_students %}
+                                <small>&#10003;</small>
+                            {% endif %}
+                        </div>
+    
+                    </div>
+    
+                    <!-- Post content / data -->
+                    <!-- Title and content -->
+                    <p class="article-content">{{ comment.content }}</p>
+                    {% if comment.image %}
+                        <a 
+                            href="{{ url_for('boards.selected_comment', topic_address=comment.topic, post_id=comment.post_id, comment_id=comment.id) }}">
+                            <img src="{{ comment.image | get_cloud_file }}" alt="post's image" class="comment-image">
+                        </a>
+                    {% endif %}
+
+                    <div class="article-footer">
+    
+                        {% if current_user.has_liked_comment(comment) %}
+                            <div class="votes">
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                                onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-up.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                    <img id="commentLike-{{ comment.id }}" class="liked" src="{{ static_url('assets', filename='clout-up-shaded.svg')}}" alt="">
+                                </button>
+                                <span id="commentCount-{{ comment.id }}" class="status-liked" style="color: #5B7EDE;"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                                onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-down.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                    <img id="commentDislike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                                </button>
+                            </div>
+                        {% elif current_user.has_disliked_comment(comment) %}
+                            <div class="votes">
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                                onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-up.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                    <img id="commentLike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                                </button>
+                                <span id="commentCount-{{ comment.id }}" class="status-disliked" style="color: #DE5B5B;"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                                onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-down.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                    <img id="commentDislike-{{ comment.id }}" class="disliked" src="{{ static_url('assets', filename='clout-down-shaded.svg') }}" alt="">
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="votes">
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                                onclick="like({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-up.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                    <img id="commentLike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                                </button>
+                                <span id="commentCount-{{ comment.id }}"> {{ comment.likes.count() - comment.dislikes.count() }} </span>
+                                <button 
+                                href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                                onclick="dislike({{ current_user.id }}, null, {{ comment.id }},
+                                '{{ static_url('assets', filename='clout-down.svg') }}', 
+                                '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                                '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                    <img id="commentDislike-{{ comment.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                                </button>
+                            </div>
+                        {% endif %}
+        
+                        <div class="comment-count">
+                            <!-- Comments -->
+                            {% set reply_count = comment.query.filter_by(comment_id=comment.id).count() %}
+        
+                            <a href="{{ url_for('boards.selected_comment', topic_address=comment.topic, post_id=comment.post_id, comment_id=comment.id) }}">
+                                <img src="{{ static_url('assets', filename='comment-count.svg') }}" alt="">
+                                <small class="text-muted">{{ reply_count }}</small>
+                            </a>
+                        </div>
+        
+                    </div>
+
+            </li>
+        </div>
+
+    </ul>
+    {% endfor %}
+
+    {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if comments.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('boards.selected_comment', topic_address=topic.topic_address, post_id=post.id, comment_id=comment.id, page=page_num) }}">
+                    {{ page_num }}
+                </a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('boards.selected_comment', topic_address=topic.topic_address, post_id=post.id, comment_id=comment.id, page=page_num) }}">
+                    {{ page_num }}
+                </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete post</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Are you sure you want to delete this post? The post will be deleted forever and cannot be retrieved again. Do you wish to continue?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('boards.delete_comment', topic_address=post.topic, post_id=post.id, comment_id=comment.id) }}" method="POST">
+                <input type="submit" class="btn btn-danger" value="Delete">
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

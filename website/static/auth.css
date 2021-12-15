@@ -1,0 +1,313 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    font-size: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    --primary-blue: #5B7EDE;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    background: #0C144A;
+}
+
+h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-blue);
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.horizontal-center {
+    margin: auto;
+    border: 3px solid #4287f5;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.small {
+    font-size: 80%;
+    text-align: center;
+}
+
+.split-screen {
+    display: flex;
+    flex-direction: column;
+}
+
+.left {
+    height: 200px;
+}
+
+.left .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left {
+    background: url("https://res.cloudinary.com/johnian-network/image/upload/v1639368329/authBackground_cx4uyj_hufbcw.png");
+}
+
+.left .copy {
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.left p {
+    font-weight: 400;
+}
+
+.right .copy {
+    color: black;
+    text-align: center;
+}
+
+.right .copy p {
+    margin: 1.5em 0;
+    font-size: 0.875rem;
+}
+
+.right form {
+    width: 450px;
+}
+
+/* --------------------------------------------------------------------------------- LOGIN - LEFT/RIGHT --------------------------------------------------------------------------------- */
+.right-login {
+    height: 200px;
+}
+
+.left .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-login {
+    background: url("https://res.cloudinary.com/johnian-network/image/upload/v1639368329/authBackground_cx4uyj_hufbcw.png");
+}
+
+.right-login .copy {
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.right-login p {
+    font-weight: 400;
+}
+
+.left-login {
+    background: #0B143B;
+}
+
+.left-login .copy {
+    color: black;
+    text-align: center;
+}
+
+.left-login .copy p {
+    margin: 1.5em 0;
+    font-size: 0.875rem;
+}
+
+.left-login form {
+    width: 450px;
+}
+
+/* ------------------------------------------------------------------------------- END LOGIN - LEFT/RIGHT  ------------------------------------------------------------------------------ */
+
+/* --------------------------------------------------------------------------------- FORMS STYLING --------------------------------------------------------------------------------- */
+
+.myForm
+{
+    background: white;
+    max-width: 750px;
+    margin: 50px auto;
+    position: relative;
+    box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);
+    padding: 50px 30px 50px 30px;
+    border-radius: 10px;
+}
+
+.textInput{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 13px;
+    border: 1px transparent #c4c4c4;
+    padding: 1.3em;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.textInput {
+    border: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #f2f2f2;
+    outline: none;
+    border: 1.7px solid transparent;
+}
+
+.textInput:focus::placeholder {
+    color: transparent;
+}
+
+.textInput::placeholder {
+    transition: color 0.3s ease;
+}
+
+.textInput:valid,
+.textInput:focus {
+    background-color: white;
+    border: 1.7px solid var(--primary-blue);
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+textarea:focus, input:focus {
+    outline: none;
+}
+
+.invalid-field {
+    background-color: white;
+    border: 1.7px solid #ff0000;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 70%;
+    margin-top: -2.2%;
+    margin-left: 1%;
+}
+
+/* ------------------------------------------------------------------------------- END FORMS STYLING ------------------------------------------------------------------------------- */
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.signup-btn {
+    display: block;
+    width: 100%;
+    background: var(--primary-blue);
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 1rem;
+    border: 1.5px solid transparent;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.signup-btn:hover {
+    color: #212567;
+    background: none;
+    border: 1.5px solid var(--primary-blue);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+@media screen and (min-width: 1024px) {
+    .split-screen {
+        flex-direction: row;
+        height: 100vh;
+    }
+    .left,
+    .right {
+        display: flex;
+        width: 50%;
+        height: auto;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .split-screen {
+        flex-direction: row;
+        height: 100vh;
+    }
+    .right-login,
+    .left-login {
+        display: flex;
+        width: 50%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .right form {
+        width: 340px;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    .left-login form {
+        width: 340px;
+    }
+}
+
+@media screen and (max-width: 376px) {
+    .right form {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 376px) {
+    .left-login form {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 325px) {
+    .right form {
+        width: 260px;
+    }
+}
+
+@media screen and (max-width: 325px) {
+    .left-login form {
+        width: 260px;
+    }
+}

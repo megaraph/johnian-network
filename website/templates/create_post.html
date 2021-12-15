@@ -1,0 +1,72 @@
+{% extends "post_forms.html" %}
+
+{% block title %} Create a post {% endblock %}
+{% block pageName %} <h1 class="page-name"> Create a post </h1> {% endblock %}
+
+{% block content %}
+
+    <form action="" method="POST" enctype="multipart/form-data" class="post-form" onsubmit="showGif()">
+        <div class="form-container">
+            <section class="copy">
+                <h2>{{ topic.topic_name }}</h2>
+            </section>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'post-title-error' %}
+                            <div class="input-container email">
+                                <label for="title">Title</label>
+                                <input id="title" type="text" name="title" class="textInput invalid-field" autocomplete="off" placeholder="Enter post title" maxlength="300" ondrop="return false;" required>
+                                <span id="remaining-text" class="remaining">0/300</span>
+                                <p class="errorMessage">{{ message }}</p>
+                            </div>
+                            <div class="input-container password1">
+                                <label for="content">Text</label>
+                                <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Enter text (optional)"></textarea>
+                            </div>
+                            <div class="">
+                                <input id="image" name="image" type="file" accept="image/*">
+                                <p class="errorMessage"></p>
+                            </div>
+                        {% elif category == 'file-type-error' %}
+                            <div class="input-container email">
+                                <label for="title">Title</label>
+                                <input id="title" type="text" name="title" class="textInput invalid-field" autocomplete="off" placeholder="Enter post title" maxlength="300" ondrop="return false;" required>
+                                <span id="remaining-text" class="remaining">0/300</span>
+                                <p class="errorMessage"></p>
+                            </div>
+                            <div class="input-container password1">
+                                <label for="content">Text</label>
+                                <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Enter text (optional)"></textarea>
+                            </div>
+                            <div class="">
+                                <input id="image" name="image" type="file" accept="image/*">
+                                <p class="errorMessage">{{ message }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="input-container email">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" name="title" class="textInput invalid-field" autocomplete="off" placeholder="Enter post title" maxlength="300" ondrop="return false;" required>
+                        <span id="remaining-text" class="remaining">0/300</span>
+                        <p class="errorMessage"></p>
+                    </div>
+                    <div class="input-container password1">
+                        <label for="content">Text</label>
+                        <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Enter text (optional)"></textarea>
+                    </div>
+                    <div class="">
+                        <input id="image" name="image" type="file" accept="image/*">
+                        <p class="errorMessage"></p>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div id="loadingGif" style="display: none;">Submitting <img src="{{ static_url('assets', filename='formSubmit.gif') }}"></div>
+            <button id="submitBtn" type="submit" class="signup-btn">Post</button>
+        </div>
+    </form>
+
+{% endblock content %}

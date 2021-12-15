@@ -1,0 +1,166 @@
+{% extends "topics_base.html" %}
+
+{% block title %} {{ topic.topic_name }} {% endblock %}
+
+{% block pageName %} {{ topic.topic_name }} {% endblock %}
+
+<!-- {% block createPost %} <a class="nav-item nav-link" href="/boards/{{ topic.topic_address }}/post/new">Create post</a> {% endblock %} -->
+
+
+{% block content %}
+
+    {% for post in posts.items %}
+
+        <article class="media content-section" id={{ post.id }}>
+            <div class="media-body">
+
+                <!-- METADATA -->
+                <div class="article-metadata">
+
+                    <div class="user-info">
+                        <!-- PROFILE PICTURE AND USER TAG -->
+                        <a href="{{ url_for('user_account.compare_with', user_id=post.author.id) }}" class="profile-pic">
+                            <img class="rounded-circle profile-pic" src="{{ static_url('assets', filename=post.author.profile_pic) }}" height="40">
+                        </a>
+                        <a class="mr-2 user-link" href="{{ url_for('user_account.compare_with', user_id=post.author.id) }}">Anonymous#{{ post.author.user_tag }}</a>
+
+                        <!-- Posted <number> <minutes/hours/days/months/years> ago [CS001] -->
+                        <span class="user-posted">• {{ post.date_posted | humanize_time(time_now) }}</span>
+                    </div>
+
+                    {% if post.only_students %}
+                            <small class="os-badge">&#10003;</small>
+                    {% endif %}
+                    
+                </div>
+
+                <!-- Post content/data -->
+                <!-- Title and content -->
+                <h1> <a class="article-title" href="{{ url_for('boards.selected_post', topic_address=post.topic, post_id=post.id) }}">{{ post.title }}</a> </h1>
+                <p class="article-content">{{ post.content }}</p>
+
+                {% if post.image %}
+                    <a 
+                        href="{{ url_for('boards.selected_post', topic_address=post.topic, post_id=post.id) }}">
+                        <img src="{{ post.image | get_cloud_file}}" alt="post's image" class="post-image">
+                    </a>
+                {% endif %}
+
+                <div class="article-footer">
+
+                    {% if current_user.has_liked_post(post) %}
+                        <div class="votes">
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                            onclick="like({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-up.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                <img id="like-{{ post.id }}" class="liked" src="{{ static_url('assets', filename='clout-up-shaded.svg')}}" alt="">
+                            </button>
+                            <span id="count-{{ post.id }}" class="status-liked" style="color: #5B7EDE;"> {{ post.likes.count() - post.dislikes.count() }} </span>
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                            onclick="dislike({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-down.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                <img id="dislike-{{ post.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                            </button>
+                        </div>
+                    {% elif current_user.has_disliked_post(post) %}
+                        <div class="votes">
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                            onclick="like({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-up.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                <img id="like-{{ post.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                            </button>
+                            <span id="count-{{ post.id }}" class="status-disliked" style="color: #DE5B5B;"> {{ post.likes.count() - post.dislikes.count() }} </span>
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                            onclick="dislike({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-down.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                <img id="dislike-{{ post.id }}" class="disliked" src="{{ static_url('assets', filename='clout-down-shaded.svg') }}" alt="">
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="votes">
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='like') }}" 
+                            onclick="like({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-up.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down.svg') }}')">
+                                <img id="like-{{ post.id }}" src="{{ static_url('assets', filename='clout-up.svg')}}" alt="">
+                            </button>
+                            <span id="count-{{ post.id }}"> {{ post.likes.count() - post.dislikes.count() }} </span>
+                            <button 
+                            href="{{ url_for('boards.like_action', topic_address=post.topic, post_id=post.id, action='dislike') }}" 
+                            onclick="dislike({{ current_user.id }}, {{ post.id }}, null, 
+                            '{{ static_url('assets', filename='clout-down.svg') }}', 
+                            '{{ static_url('assets', filename='clout-down-shaded.svg') }}', 
+                            '{{ static_url('assets', filename='clout-up.svg') }}')">
+                                <img id="dislike-{{ post.id }}" src="{{ static_url('assets', filename='clout-down.svg') }}" alt="">
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <div class="comment-count">
+                        <!-- Comments -->
+                        {% if not current_user.is_teacher %}
+                            {% set comment_count = comments.query.filter_by(post_id=post.id, comment_id=None).count() %}
+                        {% else %}
+                            {% set comment_count = comments.query.filter_by(post_id=post.id, comment_id=None, only_students=False).count() %}
+                        {% endif %}
+
+                        <a href="{{ url_for('boards.selected_post', topic_address=post.topic, post_id=post.id)}}">
+                            <img src="{{ static_url('assets', filename='comment-count.svg') }}" alt="">
+                            <small class="text-muted">{{ comment_count }}</small>
+                        </a>
+                    </div>
+
+                </div>
+
+                    {% if not current_user.is_teacher %}
+                        {% set comment_count = comments.query.filter_by(post_id=post.id, comment_id=None).count() %}
+                    {% else %}
+                        {% set comment_count = comments.query.filter_by(post_id=post.id, comment_id=None, only_students=False).count() %}
+                    {% endif %}
+
+                    <!-- <small class="text-muted">• Upvotes: {{ post.likes.count() }}</small>
+                    <small class="text-muted">• Downvotes: {{ post.dislikes.count() }}</small>
+                    <small class="text-muted">• Points: {{ post.likes.count() - post.dislikes.count() }}</small>
+                    <small class="text-muted">• Comments: {{ comment_count }}</small> -->
+                    
+                    {% if post.only_students or topic.only_students %}
+                        <small>&#10003;</small>
+                    {% endif %}
+
+            </div>
+
+        </article>
+
+    {% endfor %}
+
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if posts.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('boards.board_choice', topic_address=topic.topic_address, page=page_num) }}">
+                    {{ page_num }}
+                </a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('boards.board_choice', topic_address=topic.topic_address, page=page_num) }}">
+                    {{ page_num }}
+                </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

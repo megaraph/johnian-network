@@ -1,0 +1,62 @@
+{% extends "auth.html" %}
+
+{% block authTitle %} Confirm email {% endblock %}
+
+{% block authContent %}
+
+    <div class="split-screen">
+
+        <!-- LEFT SIDE -->
+        <div class="left-login">
+            <div class="container h-100">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'other-success' %}
+                                <div class="myAlert alert alert-success alter-dismissable fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% elif category == 'other-danger' %}
+                                <div class="myAlert alert alert-danger alter-dismissable fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+            {% endwith %}
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="myForm">
+                        <h1>Almost there!</h1>
+                        <br>
+                        <p class="text-danger"> Confirmation link will expire in 1 hour.</p>
+                        <p>
+                            Confirm your email to enter the gates of the Johnian Network. <br>
+                            Please check your inbox (and your spam folder) at <span style="text-decoration: underline;">{{ current_user }}</span> <br>
+                            — you should have received an email with a confirmation link.
+                        </p>
+                        <p>Didn't get the email? <a href="{{ url_for('auth.resend_confirmation') }}">Resend</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right-login">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <section class="copy">
+                        <h1>Jump right back in.</h1>
+                        <p>Your secret is safe with us</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

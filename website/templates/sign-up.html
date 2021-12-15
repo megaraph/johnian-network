@@ -1,0 +1,134 @@
+{% extends "auth.html" %}
+
+{% block authTitle %} Sign Up {% endblock %}
+
+{% block authContent %}
+
+    <div class="split-screen">
+        <!-- LEFT SIDE -->
+        <div class="left">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <section class="copy">
+                        <h1>Johnian Network.</h1>
+                        <p>Join the new community</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="myForm">
+                        <form action="" method="POST" onsubmit="showGif()">
+                            <section class="copy">
+                                <h2>Sign Up</h2>
+                                <div class="login-container">
+                                    <p>
+                                        Already have an account? 
+                                        <a href="/login">
+                                        <strong>Log In</strong>
+                                        </a>
+                                    </p>
+                                </div>
+                            </section>
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        {% if category == 'email-error' %}
+                                            <div class="input-container email">
+                                                <label for="email">Email</label>
+                                                <input id="email" type="email" name="email" class="textInput invalid-field" autocomplete="off" placeholder="first.last@sji.edu.ph" required>
+                                                <p class="errorMessage">{{ message }}</p>
+                                            </div>
+                                            <div class="input-container password1">
+                                                <label for="password1">Password</label>
+                                                <input id="password1" type="password" name="password1" class="textInput" placeholder="Must be at least 7 characters" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                            <div class="input-container password2">
+                                                <label for="password2">Confirm Password</label>
+                                                <input id="password2" type="password" name="password2" class="textInput" placeholder="Enter password input above" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                        {% elif category == 'signup-error' %}
+                                            <div class="input-container email">
+                                                <label for="email">Email</label>
+                                                <input id="email" type="email" name="email" class="textInput invalid-field" autocomplete="off" placeholder="first.last@sji.edu.ph" required>
+                                                <p class="errorMessage">{{ message }} <a href="/login">Login</a> instead?</p>
+                                            </div>
+                                            <div class="input-container password1">
+                                                <label for="password1">Password</label>
+                                                <input id="password1" type="password" name="password1" class="textInput" placeholder="Must be at least 7 characters" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                            <div class="input-container password2">
+                                                <label for="password2">Confirm Password</label>
+                                                <input id="password2" type="password" name="password2" class="textInput" placeholder="Enter password input above" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                        {% elif category == 'password-error' %}
+                                            <div class="input-container email">
+                                                <label for="email">Email</label>
+                                                <input id="email" type="email" name="email" class="textInput" autocomplete="off" placeholder="first.last@sji.edu.ph" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                            <div class="input-container password1">
+                                                <label for="password1">Password</label>
+                                                <input id="password1" type="password" name="password1" class="textInput invalid-field" placeholder="Must be at least 7 characters" required>
+                                                <p class="errorMessage">{{ message }}</p>
+                                            </div>
+                                            <div class="input-container password2">
+                                                <label for="password2">Confirm Password</label>
+                                                <input id="password2" type="password" name="password2" class="textInput" placeholder="Enter password input above" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                        {% elif category == 'password_confirmation-error' %}
+                                            <div class="input-container email">
+                                                <label for="email">Email</label>
+                                                <input id="email" type="email" name="email" class="textInput" autocomplete="off" placeholder="first.last@sji.edu.ph" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                            <div class="input-container password1">
+                                                <label for="password1">Password</label>
+                                                <input id="password1" type="password" name="password1" class="textInput" placeholder="Must be at least 7 characters" required>
+                                                <p class="errorMessage"></p>
+                                            </div>
+                                            <div class="input-container password2">
+                                                <label for="password2">Confirm Password</label>
+                                                <input id="password2" type="password" name="password2" class="textInput invalid-field" placeholder="Enter password input above" required>
+                                                <p class="errorMessage">{{ message }}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="input-container email">
+                                        <label for="email">Email</label>
+                                        <input id="email" type="email" name="email" class="textInput" autocomplete="off" placeholder="first.last@sji.edu.ph" required>
+                                        <p class="errorMessage"></p>
+                                    </div>
+                                    <div class="input-container password1">
+                                        <label for="password1">Password</label>
+                                        <input id="password1" type="password" name="password1" class="textInput" placeholder="Must be at least 7 characters" required>
+                                        <p class="errorMessage"></p>
+                                    </div>
+                                    <div class="input-container password2">
+                                        <label for="password2">Confirm Password</label>
+                                        <input id="password2" type="password" name="password2" class="textInput" placeholder="Enter password input above" required>
+                                        <p class="errorMessage"></p>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+
+                            <div id="loadingGif" style="display:none" align="center"><img src="{{ static_url('assets', filename='authLoader.gif') }}"></div>
+                            <button type="submit" class="signup-btn" id="submitBtn">Sign up <span class="fa fa-arrow-circle-right"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

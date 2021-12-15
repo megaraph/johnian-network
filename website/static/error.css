@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800&display=swap');
+
+body {
+  background: #F3F3F3;
+  font-family: 'Montserrat', sans-serif;
+  --primary-blue: #5B7EDE;
+}
+
+h1 {
+  color: #1A305D;
+  font-size: 80px;
+  font-weight: 700;
+}
+
+p {
+  color: #969FAE;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 15px;
+  margin-bottom: 45px;
+}
+
+.back-btn {
+  color: #f3f3f3;
+  font-size: 20px;
+  width: 280px;
+  background-color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
+}
+
+.back-btn:hover {
+  color: #f3f3f3;
+  text-decoration: none;
+  background: #315CD2;
+  transition: ease .2s;
+}
+
+.error-code {
+  color: var(--primary-blue);
+}
+
+.error-message {
+  height: 100vh;
+  max-width: 465px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.error-image {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.error-img {
+  max-height: 500px;
+  max-width: 500px;
+}
+
+/* Media queries */
+@media only screen and (max-width: 1024px) {
+  h1 {
+    font-size: 60px;
+  }
+  
+  p {
+    font-size: 18px;
+  }
+
+  .error-message {
+    max-width: 345px;
+  }
+
+  .error-image {
+    align-items: center;
+}
+
+  .error-img {
+    max-width: 250px;
+  }
+
+  .back-btn {
+    font-size: 15px;
+    width: 210px;
+    border-radius: 15px;
+    padding: 8px;
+    text-align: center;
+  }
+}
+  
+@media only screen and (max-width : 740px) {
+  .error-message {
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  .error-image {
+    height: 30px;
+  }
+  .error-img {
+    opacity: 0;
+  }
+}
+  
+@media only screen and (max-width : 421px) {
+    
+}
+  
+@media only screen and (max-height : 740px) {
+   
+}
+  
+@media only screen and (max-height : 667px) {
+    
+}
+  
+@media only screen and (max-height : 640px) {
+
+}
+/* End of Media queries */

@@ -1,0 +1,75 @@
+{% extends "post_forms.html" %}
+
+{% block title %} Edit comment {% endblock %}
+{% block pageName %} <h1 class="page-name"> Edit comment </h1> {% endblock %}
+{% block createPost %} <a class="nav-item nav-link" href="/boards/{{ topic.topic_address }}/post/new">Create post</a> {% endblock %}
+
+{% block content %}
+
+    <form method="POST" enctype="multipart/form-data" class="post-form" onsubmit="showGif()">
+        <div class="form-container">
+            <section class="copy">
+                <small>Commenting as Anonymous#{{ current_user.user_tag }}</small>
+            </section>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'post-content-error' %}
+                            <div class="input-container password1">
+                                <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Edit your comment">{{ comment.content }}</textarea>
+                            </div>
+                            <p class="errorMessage">{{ message }}</p>
+                            <div class="">
+                                <input id="image" name="image" type="file" accept="image/*">
+                                <p class="errorMessage"></p>
+                            </div>
+                            {% if comment.image %}
+                                <a href="{{ url_for('boards.remove_comment_image', comment_id=comment.id) }}">Remove image</a>
+                                <div class="input-container password1">
+                                    <p>Image preview:</p>
+                                    <img src="{{ comment.image | get_cloud_file }}" alt="selected image" width="200">
+                                </div>
+                            {% endif %}
+                        {% elif category == 'file-type-error' %}
+                            <div class="input-container password1">
+                                <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Edit your comment">{{ comment.content }}</textarea>
+                            </div>
+                            <p class="errorMessage"></p>
+                            <div class="">
+                                <input id="image" name="image" type="file" accept="image/*">
+                                <p class="errorMessage">{{ message }}</p>
+                            </div>
+                            {% if comment.image  %}
+                                <a href="{{ url_for('boards.remove_comment_image', comment_id=comment.id) }}">Remove image</a>
+                                <div class="input-container password1">
+                                    <p>Image preview:</p>
+                                    <img src="{{ comment.image | get_cloud_file }}" alt="selected image" width="200">
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="input-container password1">
+                        <textarea id="content" name="content" class="textInput" rows="4" cols="50" placeholder="Edit your comment">{{ comment.content }}</textarea>
+                    </div>
+                    <div class="">
+                        <input id="image" name="image" type="file" accept="image/*">
+                        <p class="errorMessage"></p>
+                    </div>
+                    {% if comment.image  %}
+                        <a href="{{ url_for('boards.remove_comment_image', comment_id=comment.id) }}">Remove image</a>
+                        <div class="">
+                            <p>Image preview:</p>
+                            <img src="{{ comment.image | get_cloud_file }}" alt="selected image" width="200">
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+
+            <div id="loadingGif" style="display: none;">Submitting <img src="{{ static_url('assets', filename='formSubmit.gif') }}"></div>
+            <button id="submitBtn" type="submit" class="signup-btn">Comment</button>
+        </div>
+    </form>
+
+{% endblock content %}

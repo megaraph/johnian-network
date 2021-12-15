@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <!-- STYLES -->
+        <link 
+            rel="stylesheet" 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
+            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" type="text/css" href="{{ static_url('assets', filename='main.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ static_url('assets', filename='nav.css') }}">
+
+        <!-- REQUIRED META TAGS -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- WEBSITE IDENTIFIERS -->
+        <link rel="shortcut icon" href="{{ static_url('assets', filename='favicon.ico') }}" type="image/x-icon">
+        <title>{% block title %} Topic {% endblock %} • The Johnian Network</title>
+    </head>
+
+    <body>
+        <!-- NAVBAR -->
+        <header class="site-header">
+            <nav class="navbar navbar-expand-md navbar-dark nav-color fixed-top">
+                <div class="container">
+                    <a class="navbar-brand mr-4" href="{{ url_for('boards.board_choose') }}">
+                        <img src="{{ static_url('assets', filename='landing-logo.svg') }}" alt="" class="d-inline-block align-top navbar-brand-logo">
+                        <span class="navbar-brand-text">Johnian Network</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarToggle">
+                        <!-- Navbar Right Side -->
+                        <div class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#main">
+                                    Boards
+                                    <img src="{{ static_url('assets', filename='apps_white_24dp.svg') }}" alt="" height="21" class="nav-icon">
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                                    Logout
+                                    <img src="{{ static_url('assets', filename='logout_white_24dp.svg') }}" alt="" height="21" class="nav-icon">
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('user_account.account') }}">
+                                    Anonymous#{{ current_user.user_tag }}
+                                    <img src="{{ static_url('assets', filename=current_user.profile_pic) }}" alt="" height="23" class="nav-pp">
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- ALERTS -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'auth-success' or category == 'post-success' %}
+                        <div class="container">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="myAlert alert alert-success alter-dismissable alert-fixed fade show text-center" role="alert">
+                                        <span>{{ message }}</span>
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+        <main role="main" class="container">
+
+            <!-- Title Bar -->
+            <div class="title-bar">
+                <h1 class="page-title" > {% block pageName%}} {% endblock %} </h1>
+                <a class="create-post-btn" href="{{ url_for('boards.new_post', topic_address=topic.topic_address) }}">
+                    <img src="{{ static_url('assets', filename='plus.svg') }}" alt="" height="15">
+                    Create a new post
+                </a>
+            </div>
+
+            <div class="row">
+
+                <!-- RIGHT SIDEBAR -->
+                <div class="col-md-4 order-md-12">
+                    <div class="content-section">
+                        <h5>About the board</h5>
+                        <p>
+                            {{ topic.topic_description }}
+                        </p>
+
+                        <div class="sidebar-group">
+                            <div class="sidebar-item">
+                                <h2 id="sideBarUpCount">{{ board_likes }}</h2>
+                                <p>Clout Up</p>
+                            </div>
+                            <div class="sidebar-item">
+                                <h2 id="sideBarCloutCount">{{ board_likes - board_dislikes }}</h2>
+                                <p>Clout points</p>
+                            </div>
+                            <div class="sidebar-item">
+                                <h2 id="sideBarDownCount">{{ board_dislikes }}</h2>
+                                <p>Clout Down</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POST CONTENT -->
+                <div class="col-md-8 order-md-1">
+
+                    {% block content %}
+                        <p> POSTS AND CONTENT GOES HERE </p>
+                    {% endblock %}
+                </div>
+                
+            </div>
+        </main>
+
+
+        <!-- BOOTSTRAP SCRIPTS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js" 
+            integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A==" 
+            crossorigin="anonymous" 
+            referrerpolicy="no-referrer"
+        ></script>
+        <script 
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+            crossorigin="anonymous"
+        ></script>
+        <script 
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" 
+            integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" 
+            crossorigin="anonymous"
+        ></script>
+        <script 
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" 
+            crossorigin="anonymous"
+        ></script>
+
+        <!-- AJAX SCRIPT -->
+        <script
+            src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"
+        ></script>
+        
+        <!-- Character counter for post forms -->
+        <script src="{{ static_url('assets', filename='counter.js') }}"></script>
+
+        <!-- Loader gif -->
+        <script src="{{ static_url('assets', filename='loader.js') }}"></script>
+
+        <!-- Votes script -->
+        <script src="{{ static_url('assets', filename='votes.js') }}"></script>
+
+    </body>
+
+</html>

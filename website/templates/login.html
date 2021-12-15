@@ -1,0 +1,109 @@
+{% extends "auth.html" %}
+
+{% block authTitle %} Login {% endblock %}
+
+{% block authContent %}
+
+    <div class="split-screen">
+        <!-- LEFT SIDE -->
+        <div class="left-login">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="myForm">
+                        <form action="" method="POST" onsubmit="showGif()">
+                            <section class="copy">
+                                <h2>Login</h2>
+                                <div class="login-container">
+                                    <p>
+                                        Don't have an account? 
+                                        <a href="/sign-up">
+                                        <strong>Sign Up</strong>
+                                        </a>
+                                    </p>
+                                </div>
+                            </section>
+
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        {% if category == 'info' %}
+                                            <div class="myAlert alert alert-info alter-dismissable fade show" role="alert">
+                                                {{ message }}
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+
+                            <div class="input-container email">
+                                <label for="email">Email</label>
+                                <input id="email" type="email" name="email" class="textInput" autocomplete="off" placeholder="Your registered email" required>
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                    {% if messages %}
+                                        {% for category, message in messages %}
+                                            {% if category == 'email-error' %}
+                                                <p class="errorMessage"> {{ message }} </p>
+                                            {% else %}
+                                                <p class="errorMessage"></p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            <div class="input-container password">
+                                <label for="password">Password</label>
+                                <input id="password" type="password" name="password" class="textInput" placeholder="Your registered password" required>
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                    {% if messages %}
+                                        {% for category, message in messages %}
+                                            {% if category == 'password-error' %}
+                                                <p class="errorMessage"> {{ message }} </p>
+                                            {% else %}
+                                                <p class="errorMessage"></p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            
+                            <div class="input-container form-check">
+                                <input type="checkbox" class="form-check-input" id="checkbox" name="checkbox">
+                                <label for="" class="form-check-label">
+                                    <p>Remember me</p>
+                                </label>
+                            </div>
+                            
+                            <div id="loadingGif" style="display:none" align="center"><img src="{{ static_url('assets', filename='authLoader.gif') }}"></div>
+                            <button type="submit" class="signup-btn" id="submitBtn">Login <span class="fa fa-arrow-circle-right"></button>
+                            <br>
+
+                            <div align="center" class="input-container">
+                                <small>
+                                    <a href="{{ url_for('user_account.forgot_password') }}">
+                                        <strong>Forgot password?</strong>
+                                    </a>
+                                </small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right-login">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <section class="copy">
+                        <h1>Jump right back in!</h1>
+                        <p width="20">Don't miss out on what's going on right now</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
